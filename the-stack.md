@@ -1,4 +1,3 @@
-
 There are 8 key innovations that make the Solana network possible:
 * Proof of History (POH) — a clock before consensus;
 * Tower BFT — a PoH-optimized version of PBFT;
