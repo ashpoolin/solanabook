@@ -11,6 +11,11 @@ Mastering Solana: the Solana Runtime is an online book for developers, enthusias
 * Chapter 6: Developing on Solana (APIs and SDKs)
 * Chapter 7: Smart Contracts
 * Chapter 8: Solana's Sealevel Runtime 
+* Chapter 9: The Solana Whitepaper
+* Chapter 10: Advanced Topics
+* Chapter 11: The Frontier
+* Appendix A (12): Glossary
+* Appendix B (13): The Solana Stack
 
 ## License
 The document is Apache License Version 2.0. Subject to change based on what maximizes the project and community's goals for distribution, education, and outreach. 
