@@ -33,17 +33,6 @@ A positive development in solana's fee markets that is different from ethereum's
 
 How does it work in practice? Coin swappers and DEX traders experience smooth and reliable confirmations even with a modest priority fee. Ultimately, the priority or additional fee has provided significant relief to users who want to interact with popular dApps, where transactions may be time-sensitive. 
 
-#### Calculating Fees
-A brief word on priority fees: each transaction has a maximum number of "compute units" (cu) available for it to use. This limit can be set by the `setComputeUnitLimit` instruction of the `ComputeBudget` program, and there are global limit to the maximum compute units a transaction can consume (currently 1.4M cu/transaction). The unused fee paid for compute units will not be collected from the user. To set the "price" for an additional fee, you send a `SetComputeUnitPrice` instruction. The units for expressing this "price" for the `additional_fee` is painfully obscure, as it is measured in microlamports-per-compute unit. Further, you will notice it is not actually a fee, but a rate, which further complicates estimating how much you can expect to pay for a transaction. Good wallets are starting to abstract this away, but until it's the norm, it is worthwhile to understand how to do it. Each lamport is 10^-9 SOL, and a microlamport (uL) is 10^-6 lamports, so each microlamport (or priority rate unit) is 10^-15 SOL (10^-15 SOL/cu). To figure out the additional fee, multiply the rate by 10^-15 SOL/uL, then by the max compute units you expect the transaction to consume. Add in the base fee, and you'll have the total cost of the transaction fee. Like so:
-
-```
-total fee = base fee + priority fee
-total fee = base fee + compute unit limit * additional_fee * 10^-15
-units:
-sol = sol + cu * uL/cu * 10^-15 SOL/cu = sol
-Example: calculate the (maximum) total fee assuming an additional fee rate of 1000 uL/cu, and a max compute units of 200,000 cu.
-(maximum) total fee = 0.000005 + 200,000 * 1,000 * 10^-15 = 0.0000052 SOL = 5.2 * 10^-6 SOL
-```
 #### QUIC
 Prior to the solana 2.0 moment, validators accepted UDP packets sent directly to the transaction processing unit from RPC nodes. UDP is a connectionless protocol, lacking both flow control and receipt acknowledgment [1]. While UDP enables fast, asynchronous communication, it has no controls over traffic, and as we saw with solana, can be abused with astronomical amounts of spam messages. Enter QUIC: a protocol built by Google, which allows asynchronous communication, like UDP, but with sessions and flow control like TCP. Unlike TCP, however, QUIC is consistent with its namesake in that it is extremely fast. QUIC was developed as an alternative to TCP, and is described as a multiplexed transport built on top of UDP, with its transport functionality encrypted [2]. In addition to being fast, like UDP, it has additional controls for congestion management and feedback, and introduces the possibility to increase the maximum transaction size from its current limit of 1,232 bytes.
 
