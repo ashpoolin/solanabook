@@ -52,17 +52,136 @@ Example: calculate the (maximum) total fee assuming an additional fee rate of 10
 Some wallets now support tokens on multiple chains. Again, this list is non-exhaustive, but currently Backpack and Phantom have introduced ether / EVM addresses, that are derived from common seed phras(es) of the Solana keypair(s) that the wallet creates. At this time, the author is unfamiliar with each wallet's level of hardware wallet support. The prospect of using a single wallet for multiple chains greatly reduces the burden to the user of securing multiple keypairs / seed phrases, however, it may also magnify losses should a private key be compromised. Regardless, being able to access all or most of your coins from a single wallet is undeniably an attractive feature. 
 
 #### Cross-Chain Support
-No wallets currently support bridging from one chain to another, but we expect this may happen in the future. The Wormhole / Portal bridge has an API for bridging now, which, when integrated into a wallet, might provide some abstraction for the Wormhole protocol, and greatly enhance user experience, while enabling a truly multi-chain experience.
+No wallets currently support in-wallet bridging from one chain to another, but we expect this may happen in the future. The Wormhole / Portal bridge has an API for bridging now, which, when integrated into a wallet, might provide some abstraction for the Wormhole protocol, and greatly enhance user experience, while enabling a truly multi-chain experience.
 
 ### Security
- 
+While there is a host of wallets to use with your private keys, we will elect to using the Solana CLI for demonstration purposes. While it is a command line tool, it is surprisingly accessible, and can be built from source code and run locally on a user's machine, making it a reasonable choice for basic blockchain interactions such as staking and token transfers.
+
 #### Seed Phrase Creation
+There are a number of ways to create a seed phrase. The first, and easiest, is using the solana CLI. The particular tool is called `solana-keygen`. Here, we can create a new private key with accompanying 24-word seed phrase as follows:
+```bash
+solana-keygen new --outfile new_keypair.json --word-count 24
+# 
+# Generating a new keypair
+# 
+# For added security, enter a BIP39 passphrase
+# 
+# NOTE! This passphrase improves security of the recovery seed phrase NOT the
+# keypair file itself, which is stored as insecure plain text
+# 
+# BIP39 Passphrase (empty for none): hw
+# Enter same passphrase again: hw
+# 
+# Wrote new keypair to new_keypair.json
+# ============================================================================================================================================================
+# pubkey: E6QvMkasNftdDBtYaYccKQH38j13XUq4Q4CkBReAoNb8
+# ============================================================================================================================================================
+# Save this seed phrase and your BIP39 passphrase to recover your new keypair:
+# cluster oyster rescue finger ugly cotton blossom awake model true crazy pigeon obscure human nephew dolphin enact evoke pledge gather throw plunge else oven
+# ============================================================================================================================================================
+```
+
+The user should beware that this is a "hot wallet", as the keypair was created using a computer that is (presumably) connected to the internet. An alternate method for generating a more secure seed phrase offline can be found here: [https://seedpicker.net/guide/GUIDE.html](https://seedpicker.net/guide/GUIDE.html). Since Solana uses BIP-39 compatible seed phrases, this should work out fine, and will offer superior protection of digital assets. Still, use at your own risk.
 
 ### Use a Hardware Wallet
+Using a single-signature hardware wallet is a notable security upgrade from a hot wallet, and is recommended. Solana is currently supported by Ledger and Keystone hardware wallets. The Keystone wallet is notable for its air-gapped signing (compatible with Solflare on desktop and Mobile) using QR codes. For the command line, the user will need a USB-connected wallet such as Ledger Nano S or Ledger Nano X. Here we'll demonstrate how to use a Ledger Nano X with the Solana CLI. \
 
-### Use a Hot Wallet
+First, the user will need to download and upgrade the firmware, then install the Solana "app" on the device. You'll generate a Please Google this procedure, as the software and accompanying rituals are apt to change. \
 
-### Solana CLI
+Next, the user must install the udev rules so that the device can be recognized on the command line. \
+1. Connect your Ledger hardware wallet to your computer using a USB cable.                                                                                                                                                    
+2. Open Terminal or any command-line interface.                                                                                                                                                                               
+3. Clone the Ledger repository that contains the necessary udev rules by running the following command:   
+```bash
+    git clone https://github.com/LedgerHQ/udev-rules.git # check the correct link, subject to change 
+```
+4. Navigate to the cloned repository using the following command:
+```bash
+    cd udev-rules
+```    
+5. Run the install.sh script with root privileges to install the udev rules for Ledger devices:
+```bash
+    sudo ./install.sh
+```
+6. Once the installation is complete, you need to reload the udev rules by running the following command:
+```bash
+    sudo udevadm control --reload-rules
+```
+7. Now you can use the Ledger hardware wallet with the Solana CLI. Set the keypair to the hardware wallet to make transfers and other Solana operations:
+```bash
+    solana config set --keypair usb://ledger?key=0 
+    # Note: Replace 0 in ?key=0 with the appropriate derivation path index if you have multiple accounts on your Ledger wallet.
+```
+You have successfully installed the udev rules for Ledger hardware wallet and configured it for use with the Solana CLI.
+### Using the Solana CLI
+#### Get your Public Key (Address)
+To get your public key, just type the following:
+```bash
+    solana address
+    # E6QvMkasNftdDBtYaYccKQH38j13XUq4Q4CkBReAoNb8
+```
+#### Get your Balance
+To get your wallet's balance, just type the following:
+```bash
+    solana balance
+    # 0 SOL
+```
+#### Verify You Can Sign Transactions
+```bash
+    solana-keygen verify E6QvMkasNftdDBtYaYccKQH38j13XUq4Q4CkBReAoNb8 ./new_keypair.json 
+    # Verification for public key: E6QvMkasNftdDBtYaYccKQH38j13XUq4Q4CkBReAoNb8: Success
+```
+
+#### Transfer SOL
+To send 1 SOL token to an unfunded recipient using the solana transfer command, follow these steps:                                                                                                                           
+1. Make sure you have the Solana CLI installed. If not, you can install it by following the instructions on the Solana documentation.                                                                                         
+2. Open Terminal or any command-line interface.                                                                                                                                                                               
+3. Connect to the Solana network you want to use. For example, if you want to connect to the mainnet-beta network, run the following command:
+```bash
+    solana config set --url https://api.mainnet-beta.solana.com                                                                                                                                                                  
+    # Replace the URL with the appropriate cluster you want to connect to (testnet, devnet, or your own RPC provider). 
+```                                                                                                                                                                                                                          
+4. Use the solana transfer command to send 1 SOL token to the recipient. Replace <recipient-public-key> with the public key of the recipient's Solana wallet. Replace <amount-in-SOL> with the amount you want to transfer (1 in this case). The command syntax is as follows:                                                                                                                    
+```  
+    solana transfer <recipient-public-key> <amount-in-SOL>
+    # Example:
+    solana transfer HD2EH2pqwNitRWdfVSZ4byemrohfpByfEcLBGkaVafrG 1                                                                                                                                                               
+```
+5. Confirm the transaction by following the instructions provided by the CLI. This may involve confirming the transaction fee and signing the transaction with your hardware wallet (if applicable).                                            
+6. Once the transaction is confirmed, the recipient will receive the 1 SOL token.                                                                                                                                             
+
+Please note that the recipient's wallet address must be valid and associated with the Solana network you are using. Additionally, make sure you have sufficient funds in your wallet to cover transaction fees. If the wallet has not been funded previously, you must add the `--allow-unfunded-recipient` flag to the command above.
+
+#### Stake SOL
+To create, fund, and activate a stake using the solana stake-account function in Solana CLI, follow these steps:                                                                                                              
+1. Make sure you have the Solana CLI installed. If not, you can install it by following the instructions on the Solana documentation.                                                                                         
+2. Open Terminal or any command-line interface.                                                                                                                                                                               
+3. Create a new stake account by running the following command:                                                                                                                                                               
+```bash
+    solana stake-account create
+```
+
+This will generate a new stake account and provide you with the address of the stake account, which would look like stakeXXXXXXXXXXXXXXXXXXXXXXXXXX.                                                                          
+
+4. Fund the stake account with SOL tokens using the solana transfer command. For example, if you want to transfer 10 SOL tokens to the stake account, run the following command:                                              
+```bash
+    solana transfer <stake-account-address> 1
+```
+Replace <stake-account-address> with the address of the stake account generated in the previous step.                                                                                                                         
+
+5. Activate the stake account by running the following command:                                                                                                                                                               
+```bash
+    solana stake-account <stake-account-address> --activate-stake
+```                                                                                                                                                                                                                          
+Replace <stake-account-address> with the address of the stake account.                                                                                                                                                        
+
+6. Confirm the transaction by following the instructions provided by the Solana CLI. This may involve confirming the transaction fee and signing the transaction with your wallet.                                            
+7. Once the transaction is confirmed and the stake account is activated (it may take 1-3 days depending on when the next epoch starts), the stake will be eligible for staking and staking rewards based on the Solana network's staking rules.                                              
+
+It's important to note that staking typically requires additional steps such as delegating the stake to a validator or configuring the validator identity. The solana stake-account function allows you to create and fund the
+stake account, but additional steps are required for full staking functionality. Make sure to consult the Solana documentation or the specific staking instructions of your chosen validator for more details.
+
+
 
 ### Summary
 As the Solana network continues to grow, the number of wallets available continues to increase, providing users with more and better options to store and manage their tokens. Regardless of your level of experience or needs, there is a wallet suitable for you. From browser extension wallets like Solflare, desktop wallets like Phantom and Backpack to command-line wallets like Solana CLI, there is something for every user. Don't forget about innovative new developments like xNFTs, allowing the Solana network to include NFTs with executable smart contract functions.
