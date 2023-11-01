@@ -2,4 +2,4 @@ notes.txt
 .vscode/
 .vscode
 session-history/
-/book/*.pdf
+# /book/*.pdf
