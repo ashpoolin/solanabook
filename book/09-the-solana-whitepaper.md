@@ -7,11 +7,13 @@ The complete text of the Solana whitepaper can be found here: [https://solana.co
 
 ### Whitepaper Structure
 Besides introductory information (abstract, introduction, and outline), the paper's sections 3 through 7 have the real substance that define Solana and how it works. These items are:
-* Section 3: Network Design   
-* Section 4: Proof of History (PoH)
-* Section 5: Proof of Stake (PoS) Consensus
-* Section 6: Proof of Replication (PoRep)
-* Section 7: System Architecture and Performance
+```
+1. Section 3: Network Design   
+2. Section 4: Proof of History (PoH)
+3. Section 5: Proof of Stake (PoS) Consensus
+4. Section 6: Proof of Replication (PoRep)
+5. Section 7: System Architecture and Performance
+```
 
 We'll take some time to unpack each of these section in the remainder of this chapter.
 
@@ -20,11 +22,9 @@ System nodes that validate transactions and create blocks are called validators.
 
 ### Proof of History (PoH)
 This section establishes the novel use of the SHA256 hashing algorithm to create a sort of "cryptographic clock." A SHA256 hash is a cryptographic function for which the output cannot be determined from the input, without actually performing the function. That is, in order to get the result, you must indeed do the work of running the the function. Proof of history requires that the node run the SHA256 hashing function repeatedly, looping the result back into its input, and optionally appending data to the input, which effectively timestamps and enshrines data to have entered the state at a particular place in time. Combining this operation with a counter that increments up with each hash performed, you now have a timekeeping element with ticks measured in the nanoseconds range. Each hash output doesn't need to be stored, however, it is enough to capture the output after a sequence of, say, 100 hashes has run. 
-
-input --> SHA256 / += counter --> output
-+ user message (transaction)
-  <--------------------
-                              --> counter
+```
+previous hash + user message (transaction) --> SHA256, += counter --> new hash
+```
 
 <example hash table>
 

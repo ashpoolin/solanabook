@@ -1,15 +1,17 @@
-# Appendix A
+# Appendix B
 ## The Solana Stack
 
 There are 8 core innovations that make the Solana network possible. These are:
-* Proof of History (POH) — a clock before consensus;
-* Tower BFT — a PoH-optimized version of PBFT;
-* Turbine — a block propagation protocol;
-* Gulf Stream — Mempool-less transaction forwarding protocol;
-* Sealevel — Parallel smart contracts run-time;
-* Pipelining — a Transaction Processing Unit for validation optimization
-* Cloudbreak — Horizontally-Scaled Accounts Database; and
-* Replicators — Distributed ledger store
+```
+Proof of History (POH) — a clock before consensus;
+Tower BFT — a PoH-optimized version of PBFT;
+Turbine — a block propagation protocol;
+Gulf Stream — Mempool-less transaction forwarding protocol;
+Sealevel — Parallel smart contracts run-time;
+Pipelining — a Transaction Processing Unit for validation optimization
+Cloudbreak — Horizontally-Scaled Accounts Database; and
+Replicators — Distributed ledger store
+```
 
 ### Proof of History (POH) - A Clock Before Consensus
 Proof of History (POH) is a unique innovation that lies at the heart of Solana's blockchain. It functions as a decentralized clock, allowing the network to reach consensus more efficiently. POH leverages cryptographic techniques to generate a secure and verifiable timestamp for each transaction, eliminating the need for heavy computational resources. It works by using a sequential pre-image resistant hash function that is applied to a seed, generating a chain of hashes. Each hash in the chain represents a "tick" in the POH clock, which in turn timestamps the transactions, allowing the network to agree on the order of events without significant overhead.

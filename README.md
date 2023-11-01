@@ -2,15 +2,15 @@
 Mastering Solana: the Solana Runtime is an online book for developers, enthusiasts who want to understand the Solana blockchain, and its execution environment.
 
 ## Table of Contents
-* Forward
+* Chapter 0: Foreward
 * Chapter 1: What is Solana 
 * Chapter 2: Solana Basics
 * Chapter 3: Wallets
-* Chapter 4: Clients and RPCs
+* Chapter 4: Tokens
 * Chapter 5: Instructions and Transactions
 * Chapter 6: Developing on Solana (APIs and SDKs)
 * Chapter 7: Smart Contracts
-* Chapter 8: Solana's Sealevel Runtime 
+* Chapter 8: Solana Virtual Machine (SVM) 
 * Chapter 9: The Solana Whitepaper
 * Chapter 10: Advanced Topics
 * Chapter 11: The Frontier
